@@ -21,6 +21,8 @@
   "controlnet_strength": 0.4,
   "controlnet_start": 0.0,
   "controlnet_end": 0.55,
+  "canny_low_threshold": 100,
+  "canny_high_threshold": 200,
   "seed_mode": "random",
   "base_seed": 123456,
   "poll_seconds": 1.0,
