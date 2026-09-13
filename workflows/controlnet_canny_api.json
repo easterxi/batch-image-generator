@@ -1,0 +1,12 @@
+{
+  "1": {"inputs":{"ckpt_name":"YOUR_CHECKPOINT.safetensors"},"class_type":"CheckpointLoaderSimple","_meta":{"title":"Load Checkpoint"}},
+  "2": {"inputs":{"text":"POSITIVE_PROMPT","clip":["1",1]},"class_type":"CLIPTextEncode","_meta":{"title":"Positive Prompt"}},
+  "3": {"inputs":{"text":"NEGATIVE_PROMPT","clip":["1",1]},"class_type":"CLIPTextEncode","_meta":{"title":"Negative Prompt"}},
+  "4": {"inputs":{"image":"control_reference.png","upload":"image"},"class_type":"LoadImage","_meta":{"title":"Control Reference"}},
+  "5": {"inputs":{"control_net_name":"YOUR_CANNY_CONTROLNET.safetensors"},"class_type":"ControlNetLoader","_meta":{"title":"Load ControlNet"}},
+  "6": {"inputs":{"strength":0.8,"start_percent":0.0,"end_percent":1.0,"positive":["2",0],"negative":["3",0],"control_net":["5",0],"image":["4",0]},"class_type":"ControlNetApplyAdvanced","_meta":{"title":"Apply ControlNet"}},
+  "7": {"inputs":{"width":512,"height":512,"batch_size":1},"class_type":"EmptyLatentImage","_meta":{"title":"Latent"}},
+  "8": {"inputs":{"seed":123456,"steps":25,"cfg":6.5,"sampler_name":"euler","scheduler":"normal","denoise":1.0,"model":["1",0],"positive":["6",0],"negative":["6",1],"latent_image":["7",0]},"class_type":"KSampler","_meta":{"title":"KSampler"}},
+  "9": {"inputs":{"samples":["8",0],"vae":["1",2]},"class_type":"VAEDecode","_meta":{"title":"Decode"}},
+  "10": {"inputs":{"filename_prefix":"batch/portrait","images":["9",0]},"class_type":"SaveImage","_meta":{"title":"Save"}}
+}

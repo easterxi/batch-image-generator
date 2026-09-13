@@ -1,0 +1,9 @@
+{
+  "gender": ["woman", "man"],
+  "age": [18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68],
+  "skin_tone": ["fair","light","warm beige","olive","medium","tan","warm brown","deep brown"],
+  "hair_color": ["black","dark brown","chestnut brown","auburn","blonde","platinum blonde","silver","white","muted pink","lavender","navy blue","teal","forest green"],
+  "hair_style": ["pixie cut","short straight bob","short wavy bob","shoulder-length straight hair","shoulder-length wavy hair","medium messy hair","medium curly hair","long straight hair","long wavy hair","low ponytail","high ponytail","low twin pigtails","twin buns","single long braid","twin braids","hime cut","afro"],
+  "outfit": ["blue cheongsam","red cheongsam","white linen shirt","black t-shirt","cream sweater","green hoodie","denim jacket","brown leather jacket","navy blazer","floral blouse","white blouse","striped shirt","blue raincoat","traditional kimono","black turtleneck"],
+  "accessory": ["no visible accessories","small hoop earrings","pearl earrings","tassel earrings","round glasses","thin metal glasses","gold pendant necklace","silver pendant necklace","flower hairpin","decorative hair ribbon","over-ear headphones"]
+}
