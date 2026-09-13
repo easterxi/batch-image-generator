@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+from controlnet_aux import OpenposeDetector
 
 import argparse, copy, csv, json, random, re, sys, time
 import urllib.parse, urllib.request
@@ -50,7 +51,9 @@ def prep_reference(src,dst,w,h,mode,low,high):
         im=ImageOps.fit(im.convert("RGB"),(w,h),method=Image.Resampling.LANCZOS)
         if mode=="canny":
             arr=np.array(im); gray=cv2.cvtColor(arr,cv2.COLOR_RGB2GRAY); edge=cv2.Canny(gray,int(low),int(high)); im=Image.fromarray(cv2.cvtColor(edge,cv2.COLOR_GRAY2RGB))
-        elif mode!="none": raise ValueError("reference_preprocess must be canny or none")
+        elif mode!="none": raise ValueError("reference_preprocess must be 'canny', 'openpose', or 'none'.")
+        elif mode == "openpose":
+        convert to pose map
         dst.parent.mkdir(parents=True,exist_ok=True); im.save(dst)
 
 def seed_for(mode,base,index,rng):
@@ -125,15 +128,15 @@ def main():
     ap.add_argument("--reference"); ap.add_argument("--checkpoint"); ap.add_argument("--controlnet"); ap.add_argument("--output-dir")
     ap.add_argument("--seed-mode",choices=["random","sequential","fixed"]); ap.add_argument("--base-seed",type=int); ap.add_argument("--force",action="store_true")
     args=ap.parse_args()
-    if args.count<1: raise SystemExit("--count must be >=1")
+    if args.count<1:  SystemExit("--count must be >=1")
     cfg=jload(project_path(args.config))
     for key,val in [("reference_image",args.reference),("checkpoint_name",args.checkpoint),("controlnet_name",args.controlnet),("output_dir",args.output_dir),("seed_mode",args.seed_mode)]:
         if val is not None: cfg[key]=val
     if args.base_seed is not None: cfg["base_seed"]=args.base_seed
     comfy=Path(cfg["comfyui_dir"]).expanduser(); server=cfg["server_url"].rstrip("/")
-    if not comfy.exists(): raise SystemExit(f"ComfyUI directory not found: {comfy}")
+    if not comfy.exists():  SystemExit(f"ComfyUI directory not found: {comfy}")
     ckpt=cfg["checkpoint_name"]; cn=cfg["controlnet_name"]
-    if ckpt.startswith("YOUR_") or cn.startswith("YOUR_"): raise SystemExit("Set checkpoint/controlnet filenames in config or CLI")
+    if ckpt.startswith("YOUR_") or cn.startswith("YOUR_"):  SystemExit("Set checkpoint/controlnet filenames in config or CLI")
     ref=project_path(cfg["reference_image"]); out=Path(cfg["output_dir"]).expanduser(); out=out if out.is_absolute() else ROOT/out; out.mkdir(parents=True,exist_ok=True)
     manifest=out/"manifest.csv"; pos_t=project_path(cfg["positive_prompt_file"]).read_text(encoding="utf-8").strip(); neg=project_path(cfg["negative_prompt_file"]).read_text(encoding="utf-8").strip(); traits=jload(project_path(cfg["traits_file"])); template=jload(project_path(cfg["workflow"]))
     print("Checking ComfyUI server..."); validate_server(server)
@@ -147,12 +150,12 @@ def main():
         print(f"[{i:06d}/{args.count:06d}] seed={seed} traits={json.dumps(used,ensure_ascii=False)}")
         try:
             pid=queue(server,wf); hist=wait_history(server,pid,float(cfg["poll_seconds"]),float(cfg["timeout_seconds"])); st=hist.get("status",{})
-            if st.get("status_str")=="error": raise RuntimeError(f"ComfyUI execution error: {st}")
+            if st.get("status_str")=="error":  RuntimeError(f"ComfyUI execution error: {st}")
             data=fetch_image(server,saved_image(hist)); tmp=target.with_suffix(".png.partial"); tmp.write_bytes(data); tmp.replace(target)
             log(manifest,{"index":i,"status":"completed","filename":target.name,"seed":seed,"prompt_id":pid,"timestamp_utc":datetime.now(timezone.utc).isoformat(),"traits_json":json.dumps(used,ensure_ascii=False),"prompt":prompt,"error":""})
             print("  saved ->",target)
         except KeyboardInterrupt:
-            print("Interrupted. Rerun to resume."); raise
+            print("Interrupted. Rerun to resume."); 
         except Exception as e:
             log(manifest,{"index":i,"status":"error","filename":target.name,"seed":seed,"prompt_id":pid,"timestamp_utc":datetime.now(timezone.utc).isoformat(),"traits_json":json.dumps(used,ensure_ascii=False),"prompt":prompt,"error":repr(e)})
             print("  ERROR:",e,file=sys.stderr)
