@@ -13,18 +13,14 @@
   "filename_prefix": "portrait",
   "width": 512,
   "height": 512,
-  
-"steps": 28,
-"cfg": 8.0,
-  
+  "steps": 28,
+  "cfg": 7.5,
   "sampler_name": "euler",
   "scheduler": "normal",
   "denoise": 1.0,
-
-"controlnet_strength": 0.25,
-"controlnet_start": 0.0,
-"controlnet_end": 0.4
-  
+  "controlnet_strength": 0.3,
+  "controlnet_start": 0.0,
+  "controlnet_end": 0.45,
   "canny_low_threshold": 100,
   "canny_high_threshold": 200,
   "seed_mode": "random",
