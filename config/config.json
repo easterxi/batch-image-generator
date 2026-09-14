@@ -20,7 +20,7 @@
   "denoise": 1.0,
   "controlnet_strength": 1,
   "controlnet_start": 0.0,
-  "controlnet_end": 0.1,
+  "controlnet_end": 1,
   "canny_low_threshold": 100,
   "canny_high_threshold": 200,
   "seed_mode": "random",
