@@ -74,7 +74,7 @@ def prep_reference(src,dst,w,h,mode,low=100,high=200):
                 image_resolution=max(w,h),
                 include_body=True,
                 include_hand=False,
-                include_face=False,
+                include_face=True,
                 output_type="pil",
             ).convert("RGB")
             im=ImageOps.fit(im,(w,h),method=Image.Resampling.LANCZOS)
